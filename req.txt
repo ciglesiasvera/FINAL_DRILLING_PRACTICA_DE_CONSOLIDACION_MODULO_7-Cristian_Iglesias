@@ -1,0 +1,267 @@
+-- Active: 1725461045121@@127.0.0.1@5432@db_practica_orm
+SIMULADOR PARA FABRICACIÓN DE PRODUCTOS FARMACÉUTICOS
+
+INSTRUCCIONES
+
+Lee con atención cada uno de los requerimientos que se presentan a continuación, y 
+desarrolla la prueba de acuerdo con lo solicitado.
+
+DESCRIPCIÓN
+
+La empresa de desarrollo de software realiza una reunión con el equipo, con la 
+finalidad de organizar un primer sprint para simular la fabricación de productos 
+farmacéuticos. Según lo capturado con el cliente, se tienen los primeros datos:
+
+• Las empresas de laboratorio farmacéuticos pueden realizar varios productos, 
+y a su vez, ésta posee un director general que no puede pertenecer a otra 
+empresa o laboratorio farmacéutico. Para este primer Sprint, el equipo de 
+desarrollo define los siguientes pasos para crear el proyecto.
+
+Parte 1: 
+
+● Cree una base de datos en PostgreSQL llamada db_final_orm con el usuario 
+userdjango, que posee la contraseña userdjango.
+
+● El proyecto debe ser construido a partir de un ambiente virtual que contiene 
+Django, y la librería para conectarse con postgresql respectivamente.
+
+● El proyecto se debe crear en una carpeta llamada practica_final_orm_django, 
+donde se creará la carpeta de gestión del proyecto config dentro del directorio. 
+
+● Configure el proyecto con la base de datos PostgreSQL creada anteriormente y 
+el usuario, también deberá crear el superusuario con el nombre de admin y contraseña 
+admin.
+
+● Cree una aplicación del proyecto llamada laboratorio con el siguiente modelo, 
+conformado de la siguiente manera:
+
+○ Laboratorio:
+    ■ nombre: cadena de caracteres.
+○ DirectorGeneral:
+    ■ nombre: cadena de caracteres.
+    ■ laboratorio: Laboratorio.
+○ Producto:
+    ■ nombre: cadena de caracteres.
+    ■ laboratorio: Laboratorio.
+    ■ f_fabricacion: Tipo fecha que comienza desde el 2015.
+    ■ p_costo: decimal con 2 dígitos decimales, y 10 dígitos en la parte entera.
+    ■ p_venta: decimal con 2 dígitos decimales, y 10 dígitos en la parte entera.
+
+● Las restricciones que existen con relación a la empresa de laboratorio son las 
+siguientes: 
+    o Un laboratorio posee un solo director general. 
+    o Un director general solo puede pertenecer a un laboratorio. 
+    o Un laboratorio fabrica muchos productos para determinado tratamiento 
+    médico, y dichos productos fabricados pertenecen a un sólo laboratorio.
+
+● Verifique el esquema de las bases de datos creadas en PostgreSQL del modelo relacional, con 
+relación a la aplicación de laboratorio.
+
+Parte 2:
+
+● Adecue el sitio administrativo de Django agregando los modelos Laboratorio, director general,
+y Productos, para que se muestre de la siguiente manera:
+
+    Django administration
+    Home > Laboratorio > Director generals
+    Start typing to filter...
+    AUTHENTICATION AND AUTHORIZATION
+    Groups                          +ADD
+    Users                           +ADD
+
+    LABORATORIO
+    Director generals               +ADD
+    Laboratorios                    +ADD
+    Productos                       +ADD
+
+
+*  Adecue la interfaz administrativa con la finalidad de que se observe de la siguiente manera, y 
+agregue los siguientes Laboratorios:
+
+Select laboratorio to change                                       (ADD LABORATORIO +)
+Action:  !------      | Go 0 of 3 selected
+    ID                                       nombre
+    1                                        Laboratorio 1
+    2                                        Laboratorio 2
+    3                                        Laboratorio 3
+
+    3 Laboratorios
+
+*   Adecue la interfaz administrativa con la finalidad de que se observe de la siguiente 
+manera, y agregue por medio de la interfaz administrativa, los siguientes directores 
+generales:
+
+Select director general to change                               (ADD DIRECTOR GENERAL +)
+Action: |------      | Go 0 of 3 selected
+    ID             NOMBRE                                   LABORATORIO
+    1              Director general 1                       Laboratorio 1
+    2              Director general 2                       Laboratorio 2
+    3              Director general 3                       Laboratorio 3
+
+*   Adecue la interfaz administrativa con la finalidad de que se observe de la siguiente 
+manera, y agregue por medio de la interfaz administrativa, los siguientes Productos:
+
+Select producto to change                                      (ADD PRODUCTO +)
+Action: |------      | Go 0 of 3 selected                                  FILTER
+    ID   NOMBRE       LABORATORIO     F FABRICACIÓN  P COSTO   P VENTA     | By nombre
+    1              Producto 1                               Laboratorio 1  All
+    2              Producto 2                               Laboratorio 2  Producto 1
+    3              Producto 3                               Laboratorio 3  Producto 2
+                                                                           Producto 3
+
+                                                                           By laboratorio
+                                                                           Laboratorio 1
+                                                                           Laboratorio 2
+                                                                           Laboratorio 3
+
+
+Por medio de la consola interpretador de python (shell), realice las siguientes consultas:
+python manage.py shell
+
+○ Obtenga todos los objetos tanto Laboratorio, DirectorGeneral y Productos.
+from laboratorio.models import Laboratorio, DirectorGeneral, Producto
+laboratorios = Laboratorio.objects.all()
+print("Laboratorios:", laboratorios)
+
+from laboratorio.models import Laboratorio, DirectorGeneral, Producto
+directores = DirectorGeneral.objects.all()
+print("Directores:", directores)
+
+from laboratorio.models import Laboratorio, DirectorGeneral, Producto
+productos = Producto.objects.all()
+print("Productos:", productos)
+
+○ Obtenga el laboratorio del Producto cuyo nombre es ‘Producto 1’.
+from laboratorio.models import Laboratorio, DirectorGeneral, Producto
+producto1_lab = Producto.objects.get(nombre='Producto 1').laboratorio
+print("Laboratorio del Producto 1:", producto1_lab)
+
+○ Ordene todos los productos por nombre, y que muestre los valores de nombre y 
+laboratorio.
+from laboratorio.models import Laboratorio, DirectorGeneral, Producto
+productos_ordenados = Producto.objects.order_by('nombre').values('nombre', 'laboratorio')
+print("Productos ordenados:", productos_ordenados)
+
+○ Realice una consulta que imprima por pantalla los laboratorios de todos los productos. 
+from laboratorio.models import Laboratorio, DirectorGeneral, Producto
+for producto in Producto.objects.all():
+    print(f"El producto {producto.nombre} pertenece al laboratorio {producto.laboratorio}")
+
+Parte 3:
+Realice las siguientes modificaciones al modelo, agregando los siguientes campos: 
+
+La nueva migración se llamará actualizado_campos.
+
+● Laboratorio:
+    ○ ciudad: cadena de caracteres.
+    ○ pais: cadena de caracteres.
+● DirectorGeneral:
+    ○ especialidad: cadena de caracteres.
+
+Muestre todas las migraciones realizadas.
+
+Parte 4:
+
+Cree el proceso de CRUD para el Modelo de Laboratorio, el cual debe tener el 
+siguiente aspecto:
+
+• Mostrar:
+
+                                      Informacion de Laboratorios
+
+        ____________________________________________________________________________________
+        |                                                                                  |        
+        |   --------------------  -------------  ---------  --------------  -----------    |
+        |   |      Nombre      |  | Ciudad    |  | Pais  |  |  Edit      |  |  Delete |    |
+        |    --------------------  -------------  ---------  --------------  -----------   |
+        |    --------------------  -------------  ---------  --------------  -----------   |
+        |    | Laboratorio 4    |  | Ciudad 4  |  |Pais 4 |  | Actualizar |  |Eliminar |   |
+        |    --------------------  -------------  ---------  --------------  -----------   |
+        |    --------------------  -------------  ---------  --------------  -----------   |
+        |    | Laboratorio 4    |  | Ciudad 4  |  |Pais 4 |  | Actualizar |  |Eliminar |   |
+        |    --------------------  -------------  ---------  --------------  -----------   |
+        |    --------------------  -------------  ---------  --------------  -----------   |
+        |    | Laboratorio 5    |  | Ciudad 5  |  |Pais 5 |  | Actualizar |  |Eliminar |   |
+        |    --------------------  -------------  ---------  --------------  -----------   |
+        |    --------------------  -------------  ---------  --------------  -----------   |
+        |    | Laboratorio 1    |  | Ciudad 1  |  |Pais 1 |  | Actualizar |  |Eliminar |   |  
+        |    --------------------  -------------  ---------  --------------  -----------   |
+        |__________________________________________________________________________________|
+
+
+¿Información de los Laboratorios?
+
+<-- Ir a la pagina de Inicio
+
+Usted ha visitado esta página 16 veces
+
+
+
+• Insertar: 
+
+                                Ingresar los Datos del Laboratorio
+
+           __________________________________________________________________________________
+           |                                                                                |                                                
+           |                                                                                |
+           |      Nombre:                      Ingrese el Nombre del Laboratorio            |
+           |      Ciudad:                      Ingrese la Ciudad del Laboratorio            |
+           |      Pais:                        Ingrese el Pais del Laboratorio              |
+           |                                                                                |
+           |                                ------------                                    |
+           |                                |  Enviar  |                                    |
+           |                                ------------                                    |
+           |                                                                                |
+           |________________________________________________________________________________|
+
+
+¿Información de los Laboratorios?
+
+Ir a información de los laboratorios-->
+
+
+• Editar: 
+
+                                Actualizar Laboratorio
+
+           __________________________________________________________________________________
+           |                                                                                |                                                
+           |                                                                                |
+           |      Nombre:                      Ingrese el Nombre del Laboratorio            |
+           |      Ciudad:                      Ingrese la Ciudad del Laboratorio            |
+           |      Pais:                        Ingrese el Pais del Laboratorio              |
+           |                                                                                |
+           |                                ------------                                    |
+           |                                |  Enviar  |                                    |
+           |                                ------------                                    |
+           |                                                                                |
+           |________________________________________________________________________________|
+
+
+• Eliminar:
+
+           __________________________________________________________________________________
+           |                                                                                |
+           | Estas seguro que deseas eliminar el alboratorio: "Laboratorio 4"?              |
+           |                                                                                |
+           | <-- Retornar a la pagina de inicio                                             |
+           |                                                                                |
+           | ------------                                                                   |
+           | | Confirm  |                                                                   |
+           | ------------                                                                   |
+           |________________________________________________________________________________|
+
+
+Parte 5:
+
+Realice pruebas unitarias al modelo Laboratorio, donde se verifique:
+
+● Que los datos en nuestra base de datos simulada coincidan con los que se crearon inicialmente 
+en setUpTestData para un laboratorio dado. 
+
+● La URL para confirmar que devuelve una respuesta HTTP 200 para laboratorio. 
+
+● Y finalmente, que la página usando reverse para llamar al nombre de la URL, busca una 
+respuesta HTTP 200, verifica que se use la plantilla correcta, y confirma que el contenido HTML 
+coincide con lo esperado.   
+            

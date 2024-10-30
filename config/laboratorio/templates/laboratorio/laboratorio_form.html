@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% if form.instance.pk %}Actualizar{% else %}Ingresar{% endif %} Laboratorio</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+        .marco-contenedor {
+            border: 1px solid #000;
+            padding: 20px;
+            margin: 20px auto;
+            width: 40%;
+            max-width: 600px;
+            display: flex;
+            justify-content: center;
+        }
+        form {
+            width: 60%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .form-field {
+            margin-bottom: 15px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 50px;
+        }
+        label {
+            flex: 0 0 50px;
+            text-align: right;
+            margin-right: 30px;
+        }
+        input {
+            flex: 0 0 200px; 
+            padding: 5px;
+        }
+        h2 {
+            text-align: center;
+        }
+        .left-aligned {
+            width: 80%;
+            text-align: left;
+            margin-top: 20px;
+        }
+        button[type="submit"] {
+            margin-top: 15px;
+            padding: 8px 15px;
+            border: 1px solid #000;
+            background-color: #fff;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h2>{% if form.instance.pk %}Actualizar{% else %}Ingresar los Datos del{% endif %} Laboratorio</h2>
+    <div class="marco-contenedor">
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-field">
+                <label>Nombre:</label>
+                <input type="text" name="nombre" placeholder="Ingrese el Nombre del Laboratorio" {% if form.instance.nombre %}value="{{ form.instance.nombre }}"{% endif %} required>
+            </div>
+            <div class="form-field">
+                <label>Ciudad:</label>
+                <input type="text" name="ciudad" placeholder="Ingrese la Ciudad del Laboratorio" {% if form.instance.ciudad %}value="{{ form.instance.ciudad }}"{% endif %} required>
+            </div>
+            <div class="form-field">
+                <label>País:</label>
+                <input type="text" name="pais" placeholder="Ingrese el País del Laboratorio" {% if form.instance.pais %}value="{{ form.instance.pais }}"{% endif %} required>
+            </div>
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+    <div class="left-aligned">
+        <p>¿Información de los Laboratorios?</p>
+        <a href="{% url 'laboratorio:laboratorio_list' %}">Ir a información de los laboratorios--></a>
+    </div>
+</body>
+</html>
